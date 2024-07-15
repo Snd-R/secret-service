@@ -1,10 +1,10 @@
 package de.swiesend.secretservice.handlers;
 
+import de.swiesend.secretservice.Static;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.messages.MethodCall;
 import org.freedesktop.dbus.types.Variant;
-import de.swiesend.secretservice.Static;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,11 +24,8 @@ public class MessageHandler {
 
     public Object[] send(String service, String path, String iface, String method, String signature, Object... args) {
         try {
-            org.freedesktop.dbus.messages.Message message = new MethodCall(
-                    service,
-                    path,
-                    iface,
-                    method, (byte) 0, signature, args);
+            org.freedesktop.dbus.messages.MessageFactory msgFactory = connection.getMessageFactory();
+            org.freedesktop.dbus.messages.Message message = msgFactory.createMethodCall(service, path, iface, method, (byte) 0, signature, args);
 
             connection.sendMessage(message);
 
@@ -41,7 +38,8 @@ public class MessageHandler {
                 if (log.isDebugEnabled()) log.debug(Arrays.deepToString(parameters));
             }
 
-            if (response instanceof org.freedesktop.dbus.errors.Error) {
+            if (response instanceof org.freedesktop.dbus.messages.Error) {
+
                 String error = response.getName();
                 switch (error) {
                     case "org.freedesktop.Secret.Error.NoSession":
