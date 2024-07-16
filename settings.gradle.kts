@@ -1,5 +1,5 @@
 rootProject.name = "secret-service"
 
-includeBuild("../hkdf") {
+includeBuild("hkdf") {
     dependencySubstitution { substitute(module("at.favre.lib:hkdf")) }
 }

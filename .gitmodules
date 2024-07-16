@@ -1,0 +1,3 @@
+[submodule "hkdf"]
+	path = hkdf
+	url = https://github.com/Snd-R/hkdf
