@@ -1,10 +1,10 @@
 package de.swiesend.secretservice;
 
+import de.swiesend.secretservice.handlers.Messaging;
 import org.freedesktop.dbus.ObjectPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.messages.DBusSignal;
 import org.freedesktop.dbus.types.Variant;
-import de.swiesend.secretservice.handlers.Messaging;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -24,12 +24,20 @@ public class Service extends Messaging implements de.swiesend.secretservice.inte
                 Static.Interfaces.SERVICE);
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Pair<Variant<byte[]>, ObjectPath> openSession(String algorithm, Variant input) {
+    public Pair<byte[], ObjectPath> openSession(String algorithm, Variant input) {
         Object[] params = send("OpenSession", "sv", algorithm, input);
         if (params == null) return null;
         session = new Session((ObjectPath) params[1], this);
-        return new Pair(params[0], params[1]);
+
+        // dbus-java starting from version 5.1 always returns List of Byte objects instead of array of primitive bytes
+        final var byteList = ((Variant<List<Byte>>) params[0]).getValue();
+        final var byteArray = new byte[byteList.size()];
+        for (int i = 0; i < byteList.size(); i++) {
+            byteArray[i] = byteList.get(i);
+        }
+        return new Pair<>(byteArray, (ObjectPath) params[1]);
     }
 
     @Override

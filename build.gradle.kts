@@ -17,8 +17,8 @@ repositories {
 
 dependencies {
     implementation("at.favre.lib:hkdf")
-    implementation("com.github.hypfvieh:dbus-java-core:5.0.0")
-    implementation("com.github.hypfvieh:dbus-java-transport-native-unixsocket:5.0.0")
+    implementation("com.github.hypfvieh:dbus-java-core:5.1.0")
+    implementation("com.github.hypfvieh:dbus-java-transport-native-unixsocket:5.1.0")
     implementation("org.slf4j:slf4j-api:2.0.13")
 
     testImplementation(platform("org.junit:junit-bom:5.10.0"))

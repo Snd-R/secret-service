@@ -1,12 +1,12 @@
 package de.swiesend.secretservice.integration;
 
-import de.swiesend.secretservice.*;
 import de.swiesend.secretservice.Collection;
+import de.swiesend.secretservice.*;
+import de.swiesend.secretservice.errors.NoSuchObject;
+import de.swiesend.secretservice.integration.test.Context;
 import org.freedesktop.dbus.ObjectPath;
 import org.freedesktop.dbus.messages.DBusSignal;
 import org.freedesktop.dbus.types.Variant;
-import de.swiesend.secretservice.errors.NoSuchObject;
-import de.swiesend.secretservice.integration.test.Context;
 import org.junit.jupiter.api.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,11 +37,10 @@ public class ServiceTest {
     public void openSession() {
         context.ensureService();
 
-        Pair<Variant<byte[]>, ObjectPath> response = context.service.openSession(Static.Algorithm.PLAIN, new Variant(""));
+        Pair<byte[], ObjectPath> response = context.service.openSession(Static.Algorithm.PLAIN, new Variant(""));
         log.info(response.toString());
 
-        assertEquals("s", response.a.getSig());
-        assertEquals("", response.a.getValue(), "the value of an empty byte[] behaves odd as it returns a String.");
+        assertEquals("", response.a, "the value of an empty byte[] behaves odd as it returns a String.");
 
         ObjectPath sessionPath = response.b;
         assertTrue(sessionPath.getPath().startsWith("/org/freedesktop/secrets/session/s"));
@@ -71,11 +70,11 @@ public class ServiceTest {
         };
         assertEquals(128, input.length);
 
-        Pair<Variant<byte[]>, ObjectPath> response = context.service.openSession(
+        Pair<byte[], ObjectPath> response = context.service.openSession(
                 Static.Algorithm.DH_IETF1024_SHA256_AES128_CBC_PKCS7, new Variant(input));
         log.info(response.toString());
 
-        byte[] peerPublicKey = response.a.getValue();
+        byte[] peerPublicKey = response.a;
         assertEquals(128, peerPublicKey.length);
 
         ObjectPath sessionPath = response.b;

@@ -78,12 +78,11 @@ public class TransportEncryption implements AutoCloseable {
         BigInteger ya = ((DHPublicKey) publicKey).getY();
 
         // open session with "Client DH pub key as an array of bytes" without prime or generator
-        Pair<Variant<byte[]>, ObjectPath> osResponse = service.openSession(
-                Static.Algorithm.DH_IETF1024_SHA256_AES128_CBC_PKCS7, new Variant(ya.toByteArray()));
+        Pair<byte[], ObjectPath> osResponse = service.openSession(Static.Algorithm.DH_IETF1024_SHA256_AES128_CBC_PKCS7, new Variant(ya.toByteArray()));
 
         // transform peer's raw Y to a public key
         if (osResponse != null) {
-            yb = osResponse.a.getValue();
+            yb = osResponse.a;
             return true;
         } else {
             return false;
