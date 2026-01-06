@@ -1,7 +1,7 @@
 package de.swiesend.secretservice;
 
 import at.favre.lib.hkdf.HKDF;
-import org.freedesktop.dbus.ObjectPath;
+import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.connections.impl.DBusConnectionBuilder;
 import org.freedesktop.dbus.exceptions.DBusException;
@@ -78,7 +78,7 @@ public class TransportEncryption implements AutoCloseable {
         BigInteger ya = ((DHPublicKey) publicKey).getY();
 
         // open session with "Client DH pub key as an array of bytes" without prime or generator
-        Pair<byte[], ObjectPath> osResponse = service.openSession(Static.Algorithm.DH_IETF1024_SHA256_AES128_CBC_PKCS7, new Variant(ya.toByteArray()));
+        Pair<byte[], DBusPath> osResponse = service.openSession(Static.Algorithm.DH_IETF1024_SHA256_AES128_CBC_PKCS7, new Variant(ya.toByteArray()));
 
         // transform peer's raw Y to a public key
         if (osResponse != null) {

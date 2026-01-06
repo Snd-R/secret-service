@@ -1,11 +1,10 @@
 package de.swiesend.secretservice;
 
+import de.swiesend.secretservice.handlers.Messaging;
 import org.freedesktop.dbus.DBusPath;
-import org.freedesktop.dbus.ObjectPath;
 import org.freedesktop.dbus.messages.DBusSignal;
 import org.freedesktop.dbus.types.UInt64;
 import org.freedesktop.dbus.types.Variant;
-import de.swiesend.secretservice.handlers.Messaging;
 
 import java.util.*;
 
@@ -75,22 +74,22 @@ public class Collection extends Messaging implements de.swiesend.secretservice.i
     }
 
     @Override
-    public ObjectPath delete() {
+    public DBusPath delete() {
         Object[] response = send("Delete", "");
         if (response == null) return null;
-        ObjectPath prompt = (ObjectPath) response[0];
+        DBusPath prompt = (DBusPath) response[0];
         return prompt;
     }
 
     @Override
-    public List<ObjectPath> searchItems(Map<String, String> attributes) {
+    public List<DBusPath> searchItems(Map<String, String> attributes) {
         Object[] response = send("SearchItems", "a{ss}", attributes);
         if (response == null) return null;
-        return (List<ObjectPath>) response[0];
+        return (List<DBusPath>) response[0];
     }
 
     @Override
-    public Pair<ObjectPath, ObjectPath> createItem(Map<String, Variant> properties, Secret secret,
+    public Pair<DBusPath, DBusPath> createItem(Map<String, Variant> properties, Secret secret,
                                                    boolean replace) {
         Object[] response = send("CreateItem", "a{sv}(oayays)b", properties, secret, replace);
         if (response == null) return null;
@@ -98,10 +97,10 @@ public class Collection extends Messaging implements de.swiesend.secretservice.i
     }
 
     @Override
-    public List<ObjectPath> getItems() {
+    public List<DBusPath> getItems() {
         Variant response = getProperty("Items");
         if (response == null) return null;
-        return (ArrayList<ObjectPath>) response.getValue();
+        return (ArrayList<DBusPath>) response.getValue();
     }
 
     @Override

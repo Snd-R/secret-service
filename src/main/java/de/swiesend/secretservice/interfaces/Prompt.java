@@ -1,13 +1,13 @@
 package de.swiesend.secretservice.interfaces;
 
-import org.freedesktop.dbus.ObjectPath;
+import de.swiesend.secretservice.Static;
+import de.swiesend.secretservice.errors.NoSuchObject;
+import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.interfaces.DBusInterface;
 import org.freedesktop.dbus.messages.DBusSignal;
 import org.freedesktop.dbus.types.Variant;
-import de.swiesend.secretservice.Static;
-import de.swiesend.secretservice.errors.NoSuchObject;
 
 @DBusInterfaceName(Static.Interfaces.PROMPT)
 public interface Prompt extends DBusInterface {
@@ -50,7 +50,7 @@ public interface Prompt extends DBusInterface {
      * 
      * @see Completed
      */
-    abstract public void prompt(ObjectPath prompt) throws NoSuchObject;
+    abstract public void prompt(DBusPath prompt) throws NoSuchObject;
 
     /**
      * Dismiss the prompt.

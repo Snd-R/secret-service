@@ -5,7 +5,6 @@ import de.swiesend.secretservice.Secret;
 import de.swiesend.secretservice.Static;
 import de.swiesend.secretservice.gnome.keyring.InternalUnsupportedGuiltRiddenInterface;
 import org.freedesktop.dbus.DBusPath;
-import org.freedesktop.dbus.ObjectPath;
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.interfaces.DBusInterface;
@@ -86,9 +85,9 @@ public interface Service extends DBusInterface {
      *
      * @see Pair
      * @see Variant
-     * @see ObjectPath
+     * @see DBusPath
      */
-    abstract public Pair<byte[], ObjectPath> openSession(String algorithm, Variant input);
+    abstract public Pair<byte[], DBusPath> openSession(String algorithm, Variant input);
 
     /**
      * Create a new collection with the specified properties.
@@ -118,7 +117,7 @@ public interface Service extends DBusInterface {
      *
      * @see Pair
      * @see Variant
-     * @see ObjectPath
+     * @see DBusPath
      */
     abstract public Pair createCollection(Map<String, Variant> properties, String alias);
 
@@ -142,7 +141,7 @@ public interface Service extends DBusInterface {
      *
      * @see Pair
      * @see Variant
-     * @see ObjectPath
+     * @see DBusPath
      */
     abstract public Pair createCollection(Map<String, Variant> properties);
 
@@ -173,9 +172,9 @@ public interface Service extends DBusInterface {
      * locked        &mdash; Items found that require authentication.<br>
      *
      * @see Pair
-     * @see ObjectPath
+     * @see DBusPath
      */
-    abstract public Pair<List<ObjectPath>, List<ObjectPath>> searchItems(Map<String, String> attributes);
+    abstract public Pair<List<DBusPath>, List<DBusPath>> searchItems(Map<String, String> attributes);
 
     /**
      * Unlock the specified objects.
@@ -189,9 +188,9 @@ public interface Service extends DBusInterface {
      * prompt       &mdash; A prompt object which can be used to unlock the remaining objects, or the special value '/' when no prompt is necessary.<br>
      *
      * @see Pair
-     * @see ObjectPath
+     * @see DBusPath
      */
-    abstract public Pair<List<ObjectPath>, ObjectPath> unlock(List<ObjectPath> objects);
+    abstract public Pair<List<DBusPath>, DBusPath> unlock(List<DBusPath> objects);
 
     /**
      * Lock the items.
@@ -206,7 +205,7 @@ public interface Service extends DBusInterface {
      *
      * @see Pair
      */
-    abstract public Pair<List<ObjectPath>, ObjectPath> lock(List<ObjectPath> objects);
+    abstract public Pair<List<DBusPath>, DBusPath> lock(List<DBusPath> objects);
 
     /**
      * Lock the entire Secret Service API.
@@ -230,7 +229,7 @@ public interface Service extends DBusInterface {
      * See Also:<br>
      * {@link InternalUnsupportedGuiltRiddenInterface#changeWithPrompt(DBusPath collection)}<br>
      */
-    abstract public ObjectPath changeLock(ObjectPath collection);
+    abstract public DBusPath changeLock(DBusPath collection);
 
     /**
      * Retrieve multiple secrets from different items.
@@ -242,9 +241,9 @@ public interface Service extends DBusInterface {
      * @return secrets     &mdash; Secrets for the items.
      *
      * @see Secret
-     * @see ObjectPath
+     * @see DBusPath
      */
-    abstract public Map<ObjectPath, Secret> getSecrets(List<ObjectPath> items, ObjectPath session);
+    abstract public Map<DBusPath, Secret> getSecrets(List<DBusPath> items, DBusPath session);
 
     /**
      * Get the collection with the given alias.
@@ -254,10 +253,10 @@ public interface Service extends DBusInterface {
      * @return collection   &mdash; The collection or the the path '/' if no such collection exists.
      *
      * @see Static.ObjectPaths
-     * @see ObjectPath
+     * @see DBusPath
      * @see Collection
      */
-    abstract public ObjectPath readAlias(String name);
+    abstract public DBusPath readAlias(String name);
 
     /**
      * Setup a collection alias.
@@ -266,14 +265,14 @@ public interface Service extends DBusInterface {
      *
      * @param collection    The collection to make the alias point to. To remove an alias use the special value '/'.
      *
-     * @see ObjectPath
+     * @see DBusPath
      * @see Collection
      */
-    abstract public void setAlias(String name, ObjectPath collection);
+    abstract public void setAlias(String name, DBusPath collection);
 
     /**
      * @return A list of present collections.
      */
-    abstract public List<ObjectPath> getCollections();
+    abstract public List<DBusPath> getCollections();
 
 }

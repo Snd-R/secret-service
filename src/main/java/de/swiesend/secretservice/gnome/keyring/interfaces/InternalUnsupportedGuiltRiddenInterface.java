@@ -1,11 +1,10 @@
 package de.swiesend.secretservice.gnome.keyring.interfaces;
 
+import de.swiesend.secretservice.Secret;
 import org.freedesktop.dbus.DBusPath;
-import org.freedesktop.dbus.ObjectPath;
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
 import org.freedesktop.dbus.interfaces.DBusInterface;
 import org.freedesktop.dbus.types.Variant;
-import de.swiesend.secretservice.Secret;
 
 import java.util.Map;
 
@@ -30,7 +29,7 @@ public interface InternalUnsupportedGuiltRiddenInterface extends DBusInterface {
      *
      * @return The ObjectPath of the collection.
      */
-    ObjectPath changeWithPrompt(DBusPath collection);
+    DBusPath changeWithPrompt(DBusPath collection);
 
     /**
      * Create a collection with a password without prompting.
@@ -40,7 +39,7 @@ public interface InternalUnsupportedGuiltRiddenInterface extends DBusInterface {
      * 
      * @return  The ObjectPath of the created collection.
      */
-    ObjectPath createWithMasterPassword(Map<String, Variant> properties, Secret master);
+    DBusPath createWithMasterPassword(Map<String, Variant> properties, Secret master);
 
     /**
      * Unlock a collection without prompting.

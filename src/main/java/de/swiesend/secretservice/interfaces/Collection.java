@@ -1,16 +1,15 @@
 package de.swiesend.secretservice.interfaces;
 
+import de.swiesend.secretservice.Pair;
+import de.swiesend.secretservice.Secret;
+import de.swiesend.secretservice.Static;
 import org.freedesktop.dbus.DBusPath;
-import org.freedesktop.dbus.ObjectPath;
 import org.freedesktop.dbus.annotations.DBusInterfaceName;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.interfaces.DBusInterface;
 import org.freedesktop.dbus.messages.DBusSignal;
 import org.freedesktop.dbus.types.UInt64;
 import org.freedesktop.dbus.types.Variant;
-import de.swiesend.secretservice.Pair;
-import de.swiesend.secretservice.Secret;
-import de.swiesend.secretservice.Static;
 
 import java.util.List;
 import java.util.Map;
@@ -79,9 +78,9 @@ public interface Collection extends DBusInterface {
      *
      * @return prompt   &mdash; A prompt to delete the collection, or the special value '/' when no prompt is necessary.
      *
-     * @see ObjectPath
+     * @see DBusPath
      */
-    abstract public ObjectPath delete();
+    abstract public DBusPath delete();
 
     /**
      * Search for items in this collection matching the lookup attributes.
@@ -90,11 +89,11 @@ public interface Collection extends DBusInterface {
      *
      * @return results     &mdash; Items that matched the attributes.
      *
-     * @see ObjectPath
+     * @see DBusPath
      * @see Secret
      * @see Item
      */
-    abstract public List<ObjectPath> searchItems(Map<String, String> attributes);
+    abstract public List<DBusPath> searchItems(Map<String, String> attributes);
 
     /**
      * Create an item with the given attributes, secret and label. If replace is set, then it replaces an item already
@@ -139,11 +138,11 @@ public interface Collection extends DBusInterface {
      * {@link de.swiesend.secretservice.Collection#createProperties(String label)}<br>
      * {@link de.swiesend.secretservice.Item#createProperties(String label, Map attributes)}<br>
      * @see Pair
-     * @see ObjectPath
+     * @see DBusPath
      * @see Secret
      * @see Item
      */
-    abstract public Pair<ObjectPath, ObjectPath> createItem(Map<String, Variant> properties, Secret secret, boolean replace);
+    abstract public Pair<DBusPath, DBusPath> createItem(Map<String, Variant> properties, Secret secret, boolean replace);
 
     /**
      * <b>Items</b> is a D-Bus Property.
@@ -152,7 +151,7 @@ public interface Collection extends DBusInterface {
      *
      * @return  Items in this collection.
      */
-    abstract public List<ObjectPath> getItems();
+    abstract public List<DBusPath> getItems();
 
     /**
      * <b>Label</b> is a D-Bus Property.

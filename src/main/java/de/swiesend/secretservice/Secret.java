@@ -1,6 +1,6 @@
 package de.swiesend.secretservice;
 
-import org.freedesktop.dbus.ObjectPath;
+import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.Struct;
 import org.freedesktop.dbus.annotations.Position;
 
@@ -17,7 +17,7 @@ import static java.util.Objects.requireNonNull;
 public final class Secret extends Struct implements AutoCloseable {
 
     @Position(0)
-    private final ObjectPath session;
+    private final DBusPath session;
     @Position(1)
     private final byte[] parameters;
     @Position(2)
@@ -34,7 +34,7 @@ public final class Secret extends Struct implements AutoCloseable {
     public static final String TEXT_PLAIN = "text/plain";
     private static final String CHARSET = "charset=";
 
-    public Secret(ObjectPath session, byte[] value) {
+    public Secret(DBusPath session, byte[] value) {
         this.session = session;
         this.parameters = "".getBytes();
         this.value = value;
@@ -43,7 +43,7 @@ public final class Secret extends Struct implements AutoCloseable {
         this.charset = StandardCharsets.UTF_8;
     }
 
-    public Secret(ObjectPath session, byte[] parameters, byte[] value) {
+    public Secret(DBusPath session, byte[] parameters, byte[] value) {
         this.session = session;
         if (parameters == null) {
             this.parameters = "".getBytes();
@@ -56,7 +56,7 @@ public final class Secret extends Struct implements AutoCloseable {
         this.charset = StandardCharsets.UTF_8;
     }
 
-    public Secret(ObjectPath session, byte[] parameters, byte[] value, String contentType) {
+    public Secret(DBusPath session, byte[] parameters, byte[] value, String contentType) {
         this.session = requireNonNull(session);
         if (parameters == null) {
             this.parameters = "".getBytes();
@@ -78,7 +78,7 @@ public final class Secret extends Struct implements AutoCloseable {
         }
     }
 
-    public Secret(ObjectPath session, byte[] parameters, byte[] value, Charset charset) {
+    public Secret(DBusPath session, byte[] parameters, byte[] value, Charset charset) {
         this.session = requireNonNull(session);
         if (parameters == null) {
             this.parameters = "".getBytes();
@@ -189,7 +189,7 @@ public final class Secret extends Struct implements AutoCloseable {
         clear();
     }
 
-    public ObjectPath getSession() {
+    public DBusPath getSession() {
         return session;
     }
 

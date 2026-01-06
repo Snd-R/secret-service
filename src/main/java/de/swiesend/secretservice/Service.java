@@ -1,7 +1,7 @@
 package de.swiesend.secretservice;
 
 import de.swiesend.secretservice.handlers.Messaging;
-import org.freedesktop.dbus.ObjectPath;
+import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.messages.DBusSignal;
 import org.freedesktop.dbus.types.Variant;
@@ -26,10 +26,10 @@ public class Service extends Messaging implements de.swiesend.secretservice.inte
 
     @SuppressWarnings("unchecked")
     @Override
-    public Pair<byte[], ObjectPath> openSession(String algorithm, Variant input) {
+    public Pair<byte[], DBusPath> openSession(String algorithm, Variant input) {
         Object[] params = send("OpenSession", "sv", algorithm, input);
         if (params == null) return null;
-        session = new Session((ObjectPath) params[1], this);
+        session = new Session((DBusPath) params[1], this);
 
         // dbus-java starting from version 5.1 always returns List of Byte objects instead of array of primitive bytes
         final var byteList = ((Variant<List<Byte>>) params[0]).getValue();
@@ -37,11 +37,11 @@ public class Service extends Messaging implements de.swiesend.secretservice.inte
         for (int i = 0; i < byteList.size(); i++) {
             byteArray[i] = byteList.get(i);
         }
-        return new Pair<>(byteArray, (ObjectPath) params[1]);
+        return new Pair<>(byteArray, (DBusPath) params[1]);
     }
 
     @Override
-    public Pair<ObjectPath, ObjectPath> createCollection(Map<String, Variant> properties, String alias) {
+    public Pair<DBusPath, DBusPath> createCollection(Map<String, Variant> properties, String alias) {
         String a;
         if (alias == null) {
             a = "";
@@ -54,26 +54,26 @@ public class Service extends Messaging implements de.swiesend.secretservice.inte
     }
 
     @Override
-    public Pair<ObjectPath, ObjectPath> createCollection(Map<String, Variant> properties) {
+    public Pair<DBusPath, DBusPath> createCollection(Map<String, Variant> properties) {
         return createCollection(properties, "");
     }
 
     @Override
-    public Pair<List<ObjectPath>, List<ObjectPath>> searchItems(Map<String, String> attributes) {
+    public Pair<List<DBusPath>, List<DBusPath>> searchItems(Map<String, String> attributes) {
         Object[] params = send("SearchItems", "a{ss}", attributes);
         if (params == null) return null;
         return new Pair(params[0], params[1]);
     }
 
     @Override
-    public Pair<List<ObjectPath>, ObjectPath> unlock(List<ObjectPath> objects) {
+    public Pair<List<DBusPath>, DBusPath> unlock(List<DBusPath> objects) {
         Object[] params = send("Unlock", "ao", objects);
         if (params == null) return null;
         return new Pair(params[0], params[1]);
     }
 
     @Override
-    public Pair<List<ObjectPath>, ObjectPath> lock(List<ObjectPath> objects) {
+    public Pair<List<DBusPath>, DBusPath> lock(List<DBusPath> objects) {
         Object[] params = send("Lock", "ao", objects);
         if (params == null) return null;
         return new Pair(params[0], params[1]);
@@ -85,36 +85,36 @@ public class Service extends Messaging implements de.swiesend.secretservice.inte
     }
 
     @Override
-    public ObjectPath changeLock(ObjectPath collection) {
+    public DBusPath changeLock(DBusPath collection) {
         Object[] params = send("ChangeLock", "o", collection);
         if (params == null) return null;
-        return (ObjectPath) params[0];
+        return (DBusPath) params[0];
     }
 
     @Override
-    public Map<ObjectPath, Secret> getSecrets(List<ObjectPath> items, ObjectPath session) {
+    public Map<DBusPath, Secret> getSecrets(List<DBusPath> items, DBusPath session) {
         Object[] params = send("GetSecrets", "aoo", items, session);
         if (params == null) return null;
-        return (Map<ObjectPath, Secret>) params[0];
+        return (Map<DBusPath, Secret>) params[0];
     }
 
     @Override
-    public ObjectPath readAlias(String name) {
+    public DBusPath readAlias(String name) {
         Object[] params = send("ReadAlias", "s", name);
         if (params == null) return null;
-        return (ObjectPath) params[0];
+        return (DBusPath) params[0];
     }
 
     @Override
-    public void setAlias(String name, ObjectPath collection) {
+    public void setAlias(String name, DBusPath collection) {
         send("SetAlias", "so", name, collection);
     }
 
     @Override
-    public List<ObjectPath> getCollections() {
+    public List<DBusPath> getCollections() {
         Variant response = getProperty("Collections");
         if (response == null) return null;
-        return (ArrayList<ObjectPath>) response.getValue();
+        return (ArrayList<DBusPath>) response.getValue();
     }
 
     @Override

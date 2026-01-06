@@ -1,12 +1,12 @@
 package de.swiesend.secretservice.integration.test;
 
 import de.swiesend.secretservice.*;
-import org.freedesktop.dbus.ObjectPath;
+import de.swiesend.secretservice.gnome.keyring.InternalUnsupportedGuiltRiddenInterface;
+import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.connections.impl.DBusConnectionBuilder;
 import org.freedesktop.dbus.exceptions.DBusException;
 import org.freedesktop.dbus.types.Variant;
-import de.swiesend.secretservice.gnome.keyring.InternalUnsupportedGuiltRiddenInterface;
 import org.slf4j.Logger;
 
 import java.math.BigInteger;
@@ -86,7 +86,7 @@ public class Context {
 
         collections = Static.Convert.toStrings(service.getCollections());
         if (collections.contains(Static.ObjectPaths.collection("test"))) {
-            ObjectPath deletePrompt = collection.delete();
+            DBusPath deletePrompt = collection.delete();
             if (!deletePrompt.getPath().equals("/")) {
                 log.error("won't wait for prompt in automated test context.");
                 exit(-3);
@@ -128,15 +128,15 @@ public class Context {
             withoutPrompt.unlockWithMasterPassword(collection.getPath(), password);
         }
 
-        List<ObjectPath> items = collection.getItems();
-        for (ObjectPath path : items) {
+        List<DBusPath> items = collection.getItems();
+        for (DBusPath path : items) {
             Item i = new Item(path, service);
             i.delete();
         }
 
         Map<String, Variant> properties = Item.createProperties("TestItem", attributes);
-        Pair<ObjectPath, ObjectPath> response = collection.createItem(properties, secret, true);
-        ObjectPath itemPath = response.a;
+        Pair<DBusPath, DBusPath> response = collection.createItem(properties, secret, true);
+        DBusPath itemPath = response.a;
 
         item = new Item(itemPath, service);
     }

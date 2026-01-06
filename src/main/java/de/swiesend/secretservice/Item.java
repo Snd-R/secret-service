@@ -1,9 +1,9 @@
 package de.swiesend.secretservice;
 
-import org.freedesktop.dbus.ObjectPath;
+import de.swiesend.secretservice.handlers.Messaging;
+import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.types.UInt64;
 import org.freedesktop.dbus.types.Variant;
-import de.swiesend.secretservice.handlers.Messaging;
 
 import java.util.*;
 
@@ -19,7 +19,7 @@ public class Item extends Messaging implements de.swiesend.secretservice.interfa
         this.id = itemID;
     }
 
-    public Item(ObjectPath item, Service service) {
+    public Item(DBusPath item, Service service) {
         super(service.getConnection(), null,
                 Static.Service.SECRETS,
                 item.getPath(),
@@ -82,21 +82,21 @@ public class Item extends Messaging implements de.swiesend.secretservice.interfa
     }
 
     @Override
-    public ObjectPath delete() {
+    public DBusPath delete() {
         Object[] response = send("Delete", "");
         if (response == null) return null;
-        ObjectPath prompt = (ObjectPath) response[0];
+        DBusPath prompt = (DBusPath) response[0];
         return prompt;
     }
 
     @Override
-    public Secret getSecret(ObjectPath session) {
+    public Secret getSecret(DBusPath session) {
         Object[] response = send("GetSecret", "o", session);
         if (response == null) return null;
         try {
             Object[] inner = (Object[]) response[0];
 
-            ObjectPath session_path = (ObjectPath) inner[0];
+            DBusPath session_path = (DBusPath) inner[0];
             byte[] parameters = Static.Convert.toByteArray((ArrayList<Byte>) inner[1]);
             byte[] value = Static.Convert.toByteArray((ArrayList<Byte>) inner[2]);
             String contentType = (String) inner[3];

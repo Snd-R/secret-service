@@ -1,10 +1,10 @@
 package de.swiesend.secretservice.handlers;
 
-import org.freedesktop.dbus.ObjectPath;
+import de.swiesend.secretservice.Static;
+import org.freedesktop.dbus.DBusPath;
 import org.freedesktop.dbus.connections.impl.DBusConnection;
 import org.freedesktop.dbus.messages.DBusSignal;
 import org.freedesktop.dbus.types.Variant;
-import de.swiesend.secretservice.Static;
 
 import java.util.List;
 
@@ -57,7 +57,7 @@ public abstract class Messaging {
         return objectPath;
     }
 
-    public ObjectPath getPath() {
+    public DBusPath getPath() {
         return Static.Convert.toObjectPath(objectPath);
     }
 
