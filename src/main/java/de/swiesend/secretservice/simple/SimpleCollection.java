@@ -614,6 +614,14 @@ public final class SimpleCollection extends de.swiesend.secretservice.simple.int
 
         final Item item = getItem(objectPath);
 
+        // Some Secret Service implementations (e.g. KeePassXC) lock items
+        // independently of the collection: the collection can report unlocked
+        // while the item is still locked, so the unlock() above is a no-op and
+        // the read below returns IsLocked. Unlock the item explicitly first.
+        if (item != null && item.isLocked()) {
+            performPrompt(service.unlock(Arrays.asList(item.getPath())).b);
+        }
+
         char[] decrypted = null;
         try (final Secret secret = item.getSecret(session.getPath())) {
             decrypted = transport.decrypt(secret);

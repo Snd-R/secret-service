@@ -41,14 +41,19 @@ public class MessageHandler {
             if (response instanceof org.freedesktop.dbus.messages.Error) {
 
                 String error = response.getName();
+                // Some Secret Service implementations (e.g. KeePassXC) return
+                // error replies with an empty body, so parameters may be
+                // zero-length; guard before reading parameters[0] to avoid
+                // ArrayIndexOutOfBoundsException.
+                String detail = (parameters != null && parameters.length > 0) ? String.valueOf(parameters[0]) : "";
                 switch (error) {
                     case "org.freedesktop.Secret.Error.NoSession":
                     case "org.freedesktop.Secret.Error.NoSuchObject":
-                        log.warn(error + ": " + parameters[0]);
+                        log.warn(error + ": " + detail);
                         return null;
                     case "org.gnome.keyring.Error.Denied":
                     case "org.freedesktop.Secret.Error.IsLocked":
-                        log.info(error + ": " + parameters[0]);
+                        log.info(error + ": " + detail);
                         return null;
                     case "org.freedesktop.DBus.Error.NoReply":
                     case "org.freedesktop.DBus.Error.UnknownMethod":
