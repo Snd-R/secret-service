@@ -745,6 +745,17 @@ public class Collection implements CollectionInterface {
 
         return getItem(objectPath)
                 .flatMap(item -> {
+
+                    // Some Secret Service implementations (e.g. KeePassXC) lock items
+                    // independently of the collection: the collection can report unlocked
+                    // while the item is still locked, so the unlock() above is a no-op and
+                    // the read below returns IsLocked. Unlock the item explicitly first.
+                    if (item.isLocked()) {
+                        service.getService().unlock(List.of(item.getPath()))
+                                .map(it -> it.b) // get items that require prompt
+                                .ifPresent(this::performPrompt);
+                    }
+
                     DBusPath sessionPath = session.getSession().getPath();
                     return item.getSecret(sessionPath);
                 })
