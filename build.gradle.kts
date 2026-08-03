@@ -16,7 +16,6 @@ repositories {
 }
 
 dependencies {
-    implementation("at.favre.lib:hkdf:2.0.0")
     implementation("com.github.hypfvieh:dbus-java-core:5.2.0")
     implementation("com.github.hypfvieh:dbus-java-transport-native-unixsocket:5.2.0")
     implementation("org.slf4j:slf4j-api:2.0.17")
